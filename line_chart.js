@@ -43,9 +43,9 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
         d3.interval(()=>{
           update();
-        },3000);
+        },100);
 
-      
+        d3.selectAll(".checkbox").on("change", update )
     }).catch( err => console.log(err));
 
 function update() {
@@ -54,7 +54,12 @@ function update() {
     sumstat = d3.groups(data, d => d.name);
 
 
-   const dataFilter = sumstat.filter(function(d){return d[0] == "Amanda" });
+  
+   const dataFilter = sumstat.filter(filtercallBack);
+
+   
+
+
    console.log(dataFilter);
   // color palette
   const color = d3.scaleOrdinal()
@@ -87,4 +92,17 @@ function getRandomInt(min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
+}
+
+
+//const dataFilter = sumstat.filter(function(d){return d[0] == "Amanda" });
+
+function filtercallBack(d) {
+  let checkboxes = document.querySelectorAll(".checkbox");
+   
+   for (const checkbox of checkboxes) {
+       if( d[0] === checkbox.name && checkbox.checked === true  ) {
+          return true;
+       } 
+   }
 }
