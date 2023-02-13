@@ -59,14 +59,18 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
         d3.interval(()=>{
           update();
-        },10000);
+        },500);
 
         update();
 
     }).catch( err => console.log(err));
 
 function update() {
-  console.log("hello");
+  d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
+  .then( data => {
+    sumstat = d3.groups(data, d => d.name);
+
+      console.log(sumstat);
   // color palette
   const color = d3.scaleOrdinal()
   .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
@@ -92,27 +96,35 @@ function update() {
       //EXIT old elements not present in new data
       lines.exit().remove();
       //UPDATE old elements present in new data
-      lines
-        .attr("fill", "none")
-        .attr("stroke", function(d){ return color(d[0]) })
-        .attr("stroke-width", 1.5)
-        .attr("d", function(d){
-          return d3.line()
-            .x(function(d) { return x(d.year); })
-            .y(function(d) { return y(+d.n); })
-            (d[1])
-        })
+      // lines
+      //   .attr("fill", "none")
+      //   .attr("stroke", function(d){ return color(d[0]) })
+      //   .attr("stroke-width", 1.5)
+      //   .attr("d", function(d){
+      //     return d3.line()
+      //       .x(function(d) { return x(d.year); })
+      //       .y(function(d) { return y(+d.n); })
+      //       (d[1])
+      //   })
 
       //ENTER new elements present in new data
-      lines.enter()
-      .append("path")
+      lines.join("path")
+        .attr("class","line")
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
         .attr("stroke-width", 1.5)
         .attr("d", function(d){
           return d3.line()
             .x(function(d) { return x(d.year); })
-            .y(function(d) { return y(+d.n); })
+            .y(function(d) { return getRandomInt(0, 350); })
             (d[1])
         })
+  });
+  
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); // The maximum is exclusive and the minimum is inclusive
 }
