@@ -15,7 +15,6 @@ const y = d3.scaleLinear().range([height, 0]);
 
 
 
-
 //read the data
 d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/5_OneCatSevNumOrdered.csv")
     .then( data => {
@@ -24,6 +23,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
       sumstat = d3.groups(data, d => d.name);
 
       console.log(sumstat);
+
 
       // add x axis --> it is  a date format
        x.domain( d3.extent(data, d => d.year))
@@ -39,30 +39,13 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
       svg.append("g")
         .call(d3.axisLeft(y));
 
-      // // color palette
-      // const color = d3.scaleOrdinal()
-      //   .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
-
-      // //draw the lines
-      // svg.selectAll(".line")
-      // .data(sumstat)
-      // .join("path")
-      //   .attr("fill", "none")
-      //   .attr("stroke", function(d){ return color(d[0]) })
-      //   .attr("stroke-width", 1.5)
-      //   .attr("d", function(d){
-      //     return d3.line()
-      //       .x(function(d) { return x(d.year); })
-      //       .y(function(d) { return y(+d.n); })
-      //       (d[1])
-      //   })
+        update();
 
         d3.interval(()=>{
           update();
-        },500);
+        },3000);
 
-        update();
-
+      
     }).catch( err => console.log(err));
 
 function update() {
@@ -70,42 +53,19 @@ function update() {
   .then( data => {
     sumstat = d3.groups(data, d => d.name);
 
-      console.log(sumstat);
+
+   const dataFilter = sumstat.filter(function(d){return d[0] == "Amanda" });
+   console.log(dataFilter);
   // color palette
   const color = d3.scaleOrdinal()
   .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
 
-    // svg.selectAll(".line")
-    // .data(sumstat)
-    // .join("path")
-    //   .attr("fill", "none")
-    //   .attr("stroke", function(d){ return color(d[0]) })
-    //   .attr("stroke-width", 1.5)
-    //   .attr("d", function(d){
-    //     return d3.line()
-    //       .x(function(d) { return x(d.year); })
-    //       .y(function(d) { return y(+d.n); })
-    //       (d[1])
-    //   })
-
-
       //JOIN new data with old elements
       const lines =  svg.selectAll(".line")
-      .data(sumstat)
+      .data(dataFilter)
 
       //EXIT old elements not present in new data
       lines.exit().remove();
-      //UPDATE old elements present in new data
-      // lines
-      //   .attr("fill", "none")
-      //   .attr("stroke", function(d){ return color(d[0]) })
-      //   .attr("stroke-width", 1.5)
-      //   .attr("d", function(d){
-      //     return d3.line()
-      //       .x(function(d) { return x(d.year); })
-      //       .y(function(d) { return y(+d.n); })
-      //       (d[1])
-      //   })
 
       //ENTER new elements present in new data
       lines.join("path")
@@ -116,10 +76,10 @@ function update() {
         .attr("d", function(d){
           return d3.line()
             .x(function(d) { return x(d.year); })
-            .y(function(d) { return getRandomInt(0, 350); })
+            .y(function(d) { return y(getRandomInt(0, 70000)) })
             (d[1])
         })
-  });
+  }).catch((err) => {console.log(err)});
   
 }
 

@@ -5,8 +5,13 @@
     justify-content: flex-start;
 }
 
-.line {
+/* .line {
     fill: none;
     stroke: steelblue;
     stroke-width: 2px;
+} */
+
+.fieldset-container {
+    width: 300px;
+   
 }
