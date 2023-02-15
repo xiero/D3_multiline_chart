@@ -1,3 +1,5 @@
+
+
 const margin = {top: 10, right: 30, bottom: 30, left: 60}
 const width = 460 - margin.left - margin.right;
 const height = 400 -  margin.top - margin.bottom;
@@ -22,8 +24,6 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
       // group the data i want to draw one line per group
       sumstat = d3.groups(data, d => d.name);
 
-      console.log(sumstat);
-
 
       // add x axis --> it is  a date format
        x.domain( d3.extent(data, d => d.year))
@@ -43,7 +43,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
         d3.interval(()=>{
           update();
-        },100);
+        },10000);
 
         d3.selectAll(".checkbox").on("change", update )
     }).catch( err => console.log(err));
@@ -53,14 +53,9 @@ function update() {
   .then( data => {
     sumstat = d3.groups(data, d => d.name);
 
-
-  
    const dataFilter = sumstat.filter(filtercallBack);
 
-   
-
-
-   console.log(dataFilter);
+  // console.log(dataFilter);
   // color palette
   const color = d3.scaleOrdinal()
   .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
