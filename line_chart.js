@@ -9,6 +9,7 @@ const svg = d3.select("#chart-area1")
   .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.right)
+    //.call(d3.zoom().on("zoom", zoomed))
   .append("g")
     .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
@@ -23,7 +24,6 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
       // group the data i want to draw one line per group
       sumstat = d3.groups(data, d => d.name);
-
 
       // add x axis --> it is  a date format
        x.domain( d3.extent(data, d => d.year))
@@ -43,7 +43,7 @@ d3.csv("https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_data
 
         d3.interval(()=>{
           update();
-        },10000);
+        },100);
 
         d3.selectAll(".checkbox").on("change", update )
     }).catch( err => console.log(err));
@@ -58,7 +58,8 @@ function update() {
   // console.log(dataFilter);
   // color palette
   const color = d3.scaleOrdinal()
-  .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+  .domain(["Helen", "Betty", "Dorothy", "Linda", "Deborah", "Jessica", "Patricia", "Ashley"])
+  .range(['#e41a1c','#305eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf', "#9fdfdf"])
 
       //JOIN new data with old elements
       const lines =  svg.selectAll(".line")
@@ -72,7 +73,7 @@ function update() {
         .attr("class","line")
         .attr("fill", "none")
         .attr("stroke", function(d){ return color(d[0]) })
-        .attr("stroke-width", 1.5)
+        .attr("stroke-width", 1)
         .attr("d", function(d){
           return d3.line()
             .x(function(d) { return x(d.year); })
@@ -100,4 +101,10 @@ function filtercallBack(d) {
           return true;
        } 
    }
+}
+
+function zoomed(event) {
+  const xz = event.transform.rescaleX(x);
+  path.attr("d", area(data, xz));
+  gx.call(xAxis, xz);
 }

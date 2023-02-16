@@ -12,8 +12,8 @@
     }
     console.log(data);
     /****************************************************************************** */
-    const width = 600;
-    const height = 600;
+    const width = 460;
+    const height = 460;
 
     const svg = d3.select("#chart-area2").append("svg")
         .attr("width", width)
@@ -22,7 +22,7 @@
     /**********************plotting the gridlines *****************************/
     const radialScale = d3.scaleLinear()
         .domain([0, 10])
-        .range([0, 250]);
+        .range([0, 200]);
     const ticks = [2, 4, 6, 8, 10];
 
     svg.selectAll("circle")
@@ -38,15 +38,15 @@
         );
 
     /**********************add text labels*********************************** */
-    svg.selectAll("thicklabel")
-        .data(ticks)
-        .join(
-            enter => enter.append("text")
-                .attr("class", "ticklabel")
-                .attr("x", width / 2 + 5)
-                .attr("y", d => height / 2 - radialScale(d))
-                .text( d => d.toString())
-        );
+    // svg.selectAll("thicklabel")
+    //     .data(ticks)
+    //     .join(
+    //         enter => enter.append("text")
+    //             .attr("class", "ticklabel")
+    //             .attr("x", width / 2 + 5)
+    //             .attr("y", d => height / 2 - radialScale(d))
+    //             .text( d => d.toString())
+    //     );
 
     /******************plotting the axis************************************ */
     function angleToCoordinate(angle, value){
@@ -60,7 +60,7 @@
         let angle = (Math.PI / 2) + ( 2 * Math.PI * i / features.length + 0.25);
 
         if( angle >= 2.34 && angle <= 4.44) {
-            value = value + 0.5;
+            value = value + 0.7;
         }
        
         return {
@@ -136,15 +136,16 @@
     console.log("point data",pointData);
 
 
-    svg.selectAll("dot")
-        .data(pointData)
-        .enter()
-        .append("circle")
-            .attr("cx", d => d.x )
-            .attr("cy", d => d.y  )
-            .attr("r", 15)
-            .attr("opacity", 0.5)
-            .style("fill", "blue");
+    // svg.selectAll(".point")
+    //     .data(pointData)
+    //     .enter()
+    //     .append("circle")
+    //     .attr("class", "point")
+    //         .attr("cx", d => d.x )
+    //         .attr("cy", d => d.y  )
+    //         .attr("r", 15)
+    //         .attr("opacity", 0.5)
+    //         .style("fill", "blue");
 
 
         // .join(
@@ -158,11 +159,14 @@
         //     .attr("opacity", 0.5)
         // );
 
+    updatePoints
+        d3.interval(() => {
+            updatePoints()
+        }, 100)
 
 
 
-
-   function update() {
+   function updatePoints() {
     /*****generate data *********************************************************/
     const data = [];
     const features = [ "345", "330", "315", "300", "285", "270", "255", "240", "225", "210", "195", "180", "165", "150", "135", "120", "105", "90", "75", "60", "45", "30", "15", "0" ];
@@ -174,8 +178,31 @@
         features.forEach(f => point[f] = 1 + Math.random() * 8);
         data.push(point);
     }
-    /****************************************************************** */
 
+    let pointData;
+    data.forEach( d => {
+        pointData = getPointCoordinate(d);
+    })
+
+
+    const color = d3.scaleOrdinal()
+    .range(['#e41a1c','#377eb8','#4daf4a','#984ea3','#ff7f00','#ffff33','#a65628','#f781bf','#999999'])
+    /**************************************************************************** */
+    //JOIN new data with old elements
+    const points =  svg.selectAll(".point")
+    .data(pointData);
+
+    //EXIT old elements not present in new data
+    points.exit().remove();
+
+    //ENTER new elements present in new data
+    points.join("circle")
+            .attr("class", "point")
+            .attr("cx", d => d.x )
+            .attr("cy", d => d.y  )
+            .attr("r", 15)
+            .attr("opacity", 0.5)
+            .style("fill", d => color(d));
    }
 
 
