@@ -77,7 +77,7 @@ function update() {
         .attr("d", function(d){
           return d3.line()
             .x(function(d) { return x(d.year); })
-            .y(function(d) { return y(getRandomInt(0, 70000)) })
+            .y(function(d) { return y(getRandomInt(0, 90000)) })
             (d[1])
         })
   }).catch((err) => {console.log(err)});

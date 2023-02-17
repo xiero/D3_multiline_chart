@@ -10,7 +10,7 @@
         features.forEach(f => point[f] = 1 + Math.random() * 8);
         data.push(point);
     }
-    console.log(data);
+    // console.log(data);
     /****************************************************************************** */
     const width = 460;
     const height = 460;
@@ -133,31 +133,7 @@
         pointData = getPointCoordinate(d);
     })
 
-    console.log("point data",pointData);
-
-
-    // svg.selectAll(".point")
-    //     .data(pointData)
-    //     .enter()
-    //     .append("circle")
-    //     .attr("class", "point")
-    //         .attr("cx", d => d.x )
-    //         .attr("cy", d => d.y  )
-    //         .attr("r", 15)
-    //         .attr("opacity", 0.5)
-    //         .style("fill", "blue");
-
-
-        // .join(
-        //     enter => enter.append("path")
-        //     .datum(d => getPathCoordinates(d))
-        //     .attr("d", line)
-        //     .attr("stroke-width", 3)
-        //     .attr("stroke", (_, i) => colors[i])
-        //     .attr("fill",  (_, i) => colors[i])
-        //     .attr("stroke-opacity", 1)
-        //     .attr("opacity", 0.5)
-        // );
+   // console.log("point data",pointData);
 
     updatePoints
         d3.interval(() => {
