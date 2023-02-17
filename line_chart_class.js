@@ -12,7 +12,7 @@ class LineChart {
         vis.width = 460 - vis.margin.left - vis.margin.right;
         vis.height = 400 - vis.margin.top - vis.margin.bottom;
 
-        vis.svg = d3.select("#chart-area1")
+        vis.svg = d3.select(vis.parentelement)
             .append("svg")
             .attr("width", vis.width + vis.margin.left + vis.margin.right)
             .attr("height", vis.height + vis.margin.top + vis.margin.right)
